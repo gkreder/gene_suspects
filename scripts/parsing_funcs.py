@@ -1,9 +1,12 @@
 from Bio import SeqIO
 import importlib
 import objects
+import csv
 
 importlib.reload(objects)
 
+# Takes an antiSMASH cluster output gbk file and parses
+# for use in creation of an orthogroups object
 def parse_cluster_gbk(cluster_fname):
 	types = []
 	for seq_record in SeqIO.parse(cluster_fname, "genbank"):

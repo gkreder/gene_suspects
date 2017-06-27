@@ -64,6 +64,15 @@ class gene(object):
         db_xref (list)
         location (string)
     """
+    def __init__(self):
+        self.species = None
+        self.locus_tag = None
+        self.product = None
+        self.protein_id = None
+        self.protein_seq = None
+        self.db_xref = None
+        self.location = None
+
 
     def add_gene(self, gene):
         qualifiers = gene.qualifiers
@@ -80,6 +89,77 @@ class gene(object):
         if 'db_xref' in qualifiers:
             self.db_xref = qualifiers['db_xref']
         self.locus_tag = qualifiers['locus_tag'][0]
+
+    def equals(self, other_gene):
+        if self.locus_tag == other_gene.locus_tag:
+            if self.locus_tag != None:
+                # print(self.locus_tag, other_gene.locus_tag)
+                return True
+        elif self.protein_id == other_gene.protein_id:
+            if self.protein_id != None:
+                # print(self.protein_id, other_gene.protein_id)
+                return True
+        elif self.protein_seq == other_gene.protein_seq:
+            if self.protein_seq != None:
+                # print(self.protein_seq, other_gene.protein_seq)
+                return True
+        elif self.db_xref == other_gene.db_xref:
+            if self.db_xref != None:
+                # print(self.db_xref, other_gene.db_xref)
+                return True
+        else:
+            return False
+
+    def merge(self, other_gene):
+        """
+        Assumes that self and other_gene are the same
+        gene, but that the information/annotations for each
+        one might not be completely consistent. Goes through
+        all the attributes and looks for ones where one gene
+        has an annotation, and the other has "None" for that
+        attribute. Returns a gene with the maximal set of
+        complete information between the two
+        """
+        merged_gene = gene()
+
+        if self.species != None:
+            merged_gene.species = self.species
+        else:
+            merged_gene.species = other_gene.species
+
+        if self.locus_tag != None:
+            merged_gene.locus_tag = self.locus_tag
+        else:
+            merged_gene.locus_tag = other_gene.locus_tag
+
+        if self.product != None:
+            merged_gene.product = self.product
+        else:
+            merged_gene.product = other_gene.product
+
+        if self.protein_id != None:
+            merged_gene.protein_id = self.protein_id
+        else:
+            merged_gene.protein_id = other_gene.protein_id
+
+        if self.protein_seq != None:
+            merged_gene.protein_seq = self.protein_seq
+        else:
+            merged_gene.protein_seq = other_gene.protein_seq
+
+        if self.db_xref != None:
+            merged_gene.db_xref = self.db_xref
+        else:
+            merged_gene.db_xref = other_gene.db_xref
+
+        if self.location != None:
+            merged_gene.location = self.location
+        else:
+            merged_gene.location = other_gene.location
+
+        return merged_gene
+
+
 
 
 class pfam(object):
